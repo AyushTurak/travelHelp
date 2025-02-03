@@ -23,6 +23,7 @@ export const ImagesSlider = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadedImages, setLoadedImages] = useState<string[]>([]);
+  const [isClient, setIsClient] = useState(false); // Track if we're on the client side
 
   const handleNext = useCallback(() => {
     setCurrentIndex((prevIndex) =>
@@ -56,33 +57,42 @@ export const ImagesSlider = ({
   }, [images]);
 
   useEffect(() => {
-    loadImages();
-  }, [loadImages]);
+    // Set isClient to true after the component mounts (client-side only)
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowRight") {
-        handleNext();
-      } else if (event.key === "ArrowLeft") {
-        handlePrevious();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    // autoplay
-    let interval: NodeJS.Timeout | number;
-    if (autoplay) {
-      interval = setInterval(() => {
-        handleNext();
-      }, 5000);
+    if (isClient) {
+      loadImages();
     }
+  }, [isClient, loadImages]);
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      clearInterval(interval);
-    };
-  }, [autoplay, handleNext, handlePrevious]);
+  useEffect(() => {
+    if (isClient) {
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "ArrowRight") {
+          handleNext();
+        } else if (event.key === "ArrowLeft") {
+          handlePrevious();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+
+      // autoplay
+      let interval: NodeJS.Timeout | number;
+      if (autoplay) {
+        interval = setInterval(() => {
+          handleNext();
+        }, 5000);
+      }
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        clearInterval(interval);
+      };
+    }
+  }, [autoplay, handleNext, handlePrevious, isClient]);
 
   const slideVariants = {
     initial: {
@@ -116,6 +126,10 @@ export const ImagesSlider = ({
   };
 
   const areImagesLoaded = loadedImages.length > 0;
+
+  if (!isClient) {
+    return null; // Return null during SSR to avoid rendering on the server
+  }
 
   return (
     <div

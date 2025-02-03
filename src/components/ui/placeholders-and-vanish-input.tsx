@@ -14,6 +14,7 @@ export function PlaceholdersAndVanishInput({
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+  const [isClient, setIsClient] = useState(false); // Client-side check
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startAnimation = () => {
@@ -31,6 +32,9 @@ export function PlaceholdersAndVanishInput({
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsClient(true); // Set to true once the component has mounted on the client side
+    }
     startAnimation();
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
@@ -49,7 +53,7 @@ export function PlaceholdersAndVanishInput({
   const [animating, setAnimating] = useState(false);
 
   const draw = useCallback(() => {
-    if (!inputRef.current) return;
+    if (!inputRef.current || !isClient) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -98,11 +102,13 @@ export function PlaceholdersAndVanishInput({
       r: 1,
       color: `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`,
     }));
-  }, [value]);
+  }, [value, isClient]);
 
   useEffect(() => {
-    draw();
-  }, [value, draw]);
+    if (isClient) {
+      draw();
+    }
+  }, [value, draw, isClient]);
 
   const animate = (start: number) => {
     const animateFrame = (pos: number = 0) => {
@@ -174,6 +180,9 @@ export function PlaceholdersAndVanishInput({
     vanishAndSubmit();
     onSubmit && onSubmit(e);
   };
+
+  if (!isClient) return null; // Ensure no rendering during SSR
+
   return (
     <form
       className={cn(
@@ -184,7 +193,7 @@ export function PlaceholdersAndVanishInput({
     >
       <canvas
         className={cn(
-          "absolute pointer-events-none  text-base transform scale-50 top-[20%] left-2 sm:left-8 origin-top-left filter invert dark:invert-0 pr-20",
+          "absolute pointer-events-none text-base transform scale-50 top-[20%] left-2 sm:left-8 origin-top-left filter invert dark:invert-0 pr-20",
           !animating ? "opacity-0" : "opacity-100"
         )}
         ref={canvasRef}

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -24,8 +24,16 @@ export const MenuItem = ({
   item: string;
   children?: React.ReactNode;
 }) => {
+  const [isClient, setIsClient] = useState(false); // Track if we are on the client side
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once component mounts
+  }, []);
+
+  if (!isClient) return null; // Return null on SSR
+
   return (
-    <div onMouseEnter={() => setActive(item)} className="relative ">
+    <div onMouseEnter={() => setActive(item)} className="relative">
       <motion.p
         transition={{ duration: 0.3 }}
         className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
@@ -67,6 +75,14 @@ export const Menu = ({
   setActive: (item: string | null) => void;
   children: React.ReactNode;
 }) => {
+  const [isClient, setIsClient] = useState(false); // Track if we are on the client side
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once component mounts
+  }, []);
+
+  if (!isClient) return null; // Return null on SSR
+
   return (
     <nav
       onMouseLeave={() => setActive(null)} // resets the state
@@ -88,6 +104,14 @@ export const ProductItem = ({
   href: string;
   src: string;
 }) => {
+  const [isClient, setIsClient] = useState(false); // Track if we are on the client side
+
+  useEffect(() => {
+    setIsClient(true); // Set to true once component mounts
+  }, []);
+
+  if (!isClient) return null; // Return null on SSR
+
   return (
     <Link href={href} className="flex space-x-2">
       <Image
@@ -113,7 +137,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
       {...rest}
-      className="text-neutral-700 dark:text-neutral-200 hover:text-black "
+      className="text-neutral-700 dark:text-neutral-200 hover:text-black"
     >
       {children}
     </Link>
