@@ -8,11 +8,11 @@ import { NavBarView } from "@/components/view/navBarView";
 import { MottoView } from "@/components/view/mottoView";
 import { FooterView } from "@/components/view/footerView";
 import { TestimonialView } from "@/components/view/testimonialView";
-import { User } from "@supabase/supabase-js"; 
+import type { User } from "@supabase/supabase-js";
 
 export default function Page() {
   const supabase = useSupabase();
-  const [user, setUser] = useState<User | null>(null); 
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -26,12 +26,15 @@ export default function Page() {
   }, [supabase]);
 
   if (loading) {
-    return <div className="h-screen flex items-center justify-center text-white text-xl">Loading...</div>;
+    return (
+      <div className="h-screen flex items-center justify-center text-white text-xl">
+        Loading...
+      </div>
+    );
   }
 
   return user ? (
     <main className="relative flex min-h-screen flex-col items-center justify-start bg-gradient-to-br from-blue-500 to-purple-600 text-white overflow-hidden">
-
       <div className="w-full">
         <NavBarView />
       </div>
@@ -49,7 +52,7 @@ export default function Page() {
       </div>
 
       <div className="w-full mt-16 px-4">
-            <ReviewCardView />
+        <ReviewCardView />
       </div>
 
       <div className="w-full mt-16 pt-8 pb-4 flex-shrink-0">
@@ -59,4 +62,4 @@ export default function Page() {
   ) : (
     <AuthComponent />
   );
-} 
+}

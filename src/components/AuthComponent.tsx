@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSupabase } from "@/providers/SupabaseProvider";
@@ -11,43 +10,37 @@ import { Card, CardContent } from "@/components/ui/card";
 export default function AuthComponent() {
   const supabase = useSupabase();
   const router = useRouter();
+  
+  // Declare all state hooks at the top so they are always called in the same order.
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSignUp, setIsSignUp] = useState(true);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  // Use a single submission handler that calls the appropriate method based on isSignUp.
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
     setIsLoading(true);
 
-    const { error } = await supabase.auth.signUp({ email, password });
-
-    if (error) {
-      setMessage(`Error: ${error.message}`);
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        setMessage(`Error: ${error.message}`);
+      } else {
+        setMessage("Check your email for verification!");
+        router.push("/");
+      }
     } else {
-      setMessage("Check your email for verification!");
-      router.push("/"); 
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setMessage(`Error: ${error.message}`);
+      } else {
+        setMessage("Logged in successfully!");
+        router.push("/");
+      }
     }
-
-    setIsLoading(false); 
-  };
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage("");
-    setIsLoading(true);
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      setMessage(`Error: ${error.message}`);
-    } else {
-      setMessage("Logged in successfully!");
-      router.push("/"); 
-    }
-
     setIsLoading(false);
   };
 
@@ -59,10 +52,12 @@ export default function AuthComponent() {
             {isSignUp ? "Create an Account" : "Welcome Back"}
           </h2>
           <p className="text-center text-gray-600 dark:text-gray-400">
-            {isSignUp ? "Sign up to start your journey!" : "Log in to continue where you left off!"}
+            {isSignUp
+              ? "Sign up to start your journey!"
+              : "Log in to continue where you left off!"}
           </p>
 
-          <form className="space-y-4" onSubmit={isSignUp ? handleSignUp : handleLogin}>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
               <Label>Email Address</Label>
               <Input
@@ -97,16 +92,20 @@ export default function AuthComponent() {
           )}
 
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
+            {isSignUp
+              ? "Already have an account?"
+              : "Don't have an account?"}{" "}
             <button
-              onClick={() => setIsSignUp(!isSignUp)}
+              onClick={() => setIsSignUp((prev) => !prev)}
               className="text-blue-500 hover:underline"
             >
               {isSignUp ? "Log in" : "Sign up"}
             </button>
           </p>
 
-          {message && <p className="text-center text-sm text-red-500">{message}</p>}
+          {message && (
+            <p className="text-center text-sm text-red-500">{message}</p>
+          )}
         </CardContent>
       </Card>
     </div>
