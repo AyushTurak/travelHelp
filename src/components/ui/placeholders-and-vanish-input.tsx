@@ -83,7 +83,7 @@ export function PlaceholdersAndVanishInput({
     const newData: PixelData[] = [];
 
     for (let t = 0; t < 800; t++) {
-      const i = 4 * t * 800;
+        const i = 4 * t * 800;
       for (let n = 0; n < 800; n++) {
         const e = i + 4 * n;
         if (
@@ -176,7 +176,7 @@ export function PlaceholdersAndVanishInput({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    vanishAndSubmit();
+    // vanishAndSubmit();
     onSubmit && onSubmit(e);
   };
 
@@ -200,7 +200,7 @@ export function PlaceholdersAndVanishInput({
       <input
         onChange={(e) => {
           if (!animating) {
-            setValue(e.target.value);
+            // setValue(e.target.value);
             onChange && onChange(e);
           }
         }}
