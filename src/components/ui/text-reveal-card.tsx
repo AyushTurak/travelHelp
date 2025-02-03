@@ -16,7 +16,7 @@ export const TextRevealCard = ({
   className?: string;
 }) => {
   const [widthPercentage, setWidthPercentage] = useState(0);
-  const cardRef = useRef<HTMLDivElement | any>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null); // Changed to null instead of any
   const [left, setLeft] = useState(0);
   const [localWidth, setLocalWidth] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
@@ -30,7 +30,7 @@ export const TextRevealCard = ({
     }
   }, []);
 
-  function mouseMoveHandler(event: any) {
+  function mouseMoveHandler(event: MouseEvent) { // Changed type to MouseEvent
     event.preventDefault();
 
     const { clientX } = event;
@@ -47,7 +47,7 @@ export const TextRevealCard = ({
   function mouseEnterHandler() {
     setIsMouseOver(true);
   }
-  function touchMoveHandler(event: React.TouchEvent<HTMLDivElement>) {
+  function touchMoveHandler(event: React.TouchEvent<HTMLDivElement>) { // Changed type to React.TouchEvent
     event.preventDefault();
     const clientX = event.touches[0]!.clientX;
     if (cardRef.current) {
@@ -61,7 +61,7 @@ export const TextRevealCard = ({
     <div
       onMouseEnter={mouseEnterHandler}
       onMouseLeave={mouseLeaveHandler}
-      onMouseMove={mouseMoveHandler}
+      onMouseMove ={mouseMoveHandler}
       onTouchStart={mouseEnterHandler}
       onTouchEnd={mouseLeaveHandler}
       onTouchMove={touchMoveHandler}

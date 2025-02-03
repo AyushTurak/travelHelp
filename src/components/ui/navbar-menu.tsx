@@ -133,7 +133,8 @@ export const ProductItem = ({
   );
 };
 
-export const HoveredLink = ({ children, ...rest }: any) => {
+// Modified HoveredLink component with correct type
+export const HoveredLink = ({ children, ...rest }: React.ComponentProps<typeof Link>) => {
   return (
     <Link
       {...rest}

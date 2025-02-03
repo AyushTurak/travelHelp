@@ -4,6 +4,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
+interface PixelData {
+  x: number;
+  y: number;
+  r: number;
+  color: string;
+}
+
 export function PlaceholdersAndVanishInput({
   placeholders,
   onChange,
@@ -22,6 +29,7 @@ export function PlaceholdersAndVanishInput({
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
     }, 3000);
   };
+
   const handleVisibilityChange = () => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
       clearInterval(intervalRef.current); // Clear the interval when the tab is not visible
@@ -47,7 +55,7 @@ export function PlaceholdersAndVanishInput({
   }, [placeholders]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const newDataRef = useRef<any[]>([]);
+  const newDataRef = useRef<PixelData[]>([]); // Type safety for newDataRef
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const [animating, setAnimating] = useState(false);
@@ -71,7 +79,7 @@ export function PlaceholdersAndVanishInput({
 
     const imageData = ctx.getImageData(0, 0, 800, 800);
     const pixelData = imageData.data;
-    const newData: any[] = [];
+    const newData: PixelData[] = [];
 
     for (let t = 0; t < 800; t++) {
       let i = 4 * t * 800;
@@ -85,23 +93,14 @@ export function PlaceholdersAndVanishInput({
           newData.push({
             x: n,
             y: t,
-            color: [
-              pixelData[e],
-              pixelData[e + 1],
-              pixelData[e + 2],
-              pixelData[e + 3],
-            ],
+            color: `rgba(${pixelData[e]}, ${pixelData[e + 1]}, ${pixelData[e + 2]}, ${pixelData[e + 3]})`,
+            r: 1,
           });
         }
       }
     }
 
-    newDataRef.current = newData.map(({ x, y, color }) => ({
-      x,
-      y,
-      r: 1,
-      color: `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`,
-    }));
+    newDataRef.current = newData;
   }, [value, isClient]);
 
   useEffect(() => {
@@ -113,9 +112,8 @@ export function PlaceholdersAndVanishInput({
   const animate = (start: number) => {
     const animateFrame = (pos: number = 0) => {
       requestAnimationFrame(() => {
-        const newArr = [];
-        for (let i = 0; i < newDataRef.current.length; i++) {
-          const current = newDataRef.current[i];
+        const newArr: PixelData[] = [];
+        for (const current of newDataRef.current) {
           if (current.x < pos) {
             newArr.push(current);
           } else {
@@ -134,10 +132,10 @@ export function PlaceholdersAndVanishInput({
         if (ctx) {
           ctx.clearRect(pos, 0, 800, 800);
           newDataRef.current.forEach((t) => {
-            const { x: n, y: i, r: s, color: color } = t;
-            if (n > pos) {
+            const { x, y, r, color } = t;
+            if (x > pos) {
               ctx.beginPath();
-              ctx.rect(n, i, s, s);
+              ctx.rect(x, y, r, r);
               ctx.fillStyle = color;
               ctx.strokeStyle = color;
               ctx.stroke();
@@ -165,8 +163,8 @@ export function PlaceholdersAndVanishInput({
     setAnimating(true);
     draw();
 
-    const value = inputRef.current?.value || "";
-    if (value && inputRef.current) {
+    const currentValue = inputRef.current?.value || "";
+    if (currentValue) {
       const maxX = newDataRef.current.reduce(
         (prev, current) => (current.x > prev ? current.x : prev),
         0
@@ -230,25 +228,8 @@ export function PlaceholdersAndVanishInput({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="text-gray-300 h-4 w-4"
         >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <motion.path
-            d="M5 12l14 0"
-            initial={{
-              strokeDasharray: "50%",
-              strokeDashoffset: "50%",
-            }}
-            animate={{
-              strokeDashoffset: value ? 0 : "50%",
-            }}
-            transition={{
-              duration: 0.3,
-              ease: "linear",
-            }}
-          />
-          <path d="M13 18l6 -6" />
-          <path d="M13 6l6 6" />
+          <path d="M20 12H4" />
         </motion.svg>
       </button>
 
@@ -273,7 +254,7 @@ export function PlaceholdersAndVanishInput({
                 duration: 0.3,
                 ease: "linear",
               }}
-              className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate"
+              className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-10"
             >
               {placeholders[currentPlaceholder]}
             </motion.p>

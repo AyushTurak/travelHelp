@@ -9,10 +9,11 @@ import { MottoView } from "@/components/view/mottoView";
 import { FooterView } from "@/components/view/footerView";
 import { TestimonialView } from "@/components/view/testimonialView";
 import { PlaceholdersAndVanishInputView } from "@/components/view/PlaceholdersAndVanishInputView";
+import { User } from "@supabase/supabase-js"; 
 
 export default function Page() {
   const supabase = useSupabase();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,21 +37,17 @@ export default function Page() {
         <NavBarView />
       </div>
 
-   
       <div className="w-full mt-8">
         <ImageSlider />
       </div>
 
-      
       <div className="w-full mt-16 px-4">
         <MottoView />
       </div>
 
-
       <div className="w-full mt-16 px-4">
         <TestimonialView />
       </div>
-
 
       <div className="w-full mt-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 justify-items-center items-center">
