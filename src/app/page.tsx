@@ -1,34 +1,37 @@
 "use client";
-// import { useEffect, useState } from "react";
-// import { useEffect } from "react";
-// import { useSupabase } from "@/providers/SupabaseProvider";
-// import AuthComponent from "@/components/AuthComponent";
+import { useEffect, useState } from "react";
+import { useSupabase } from "@/providers/SupabaseProvider";
+import AuthComponent from "@/components/AuthComponent";
 import { ReviewCardView } from "@/components/view/reviewCardView";
 import { ImageSlider } from "@/components/view/imageSliderView";
 import { NavBarView } from "@/components/view/navBarView";
 import { MottoView } from "@/components/view/mottoView";
 import { FooterView } from "@/components/view/footerView";
 import { TestimonialView } from "@/components/view/testimonialView";
-// import { User } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js"; 
 
 export default function Page() {
-  // const supabase = useSupabase();
-  // const [user, setUser] = useState<User | null>(null); 
-  // const [loading, setLoading] = useState(true);
+  const supabase = useSupabase();
+  const [user, setUser] = useState<User | null>(null); 
+  const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const { data: { user } } = await supabase.auth.getUser();
-  //     // setUser(user);
-  //     // setLoading(false);
-  //   };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
 
-  //   fetchUser();
-  // }, [supabase]);
+    fetchUser();
+  }, [supabase]);
 
-  // Instead of checking for user login status immediately, render the landing page first
-  return (
+  if (loading) {
+    return <div className="h-screen flex items-center justify-center text-white text-xl">Loading...</div>;
+  }
+
+  return user ? (
     <main className="relative flex min-h-screen flex-col items-center justify-start bg-gradient-to-br from-blue-500 to-purple-600 text-white overflow-hidden">
+
       <div className="w-full">
         <NavBarView />
       </div>
@@ -46,19 +49,14 @@ export default function Page() {
       </div>
 
       <div className="w-full mt-16 px-4">
-        <ReviewCardView />
+            <ReviewCardView />
       </div>
 
       <div className="w-full mt-16 pt-8 pb-4 flex-shrink-0">
         <FooterView />
       </div>
-
-      {/* Only show AuthComponent if not logged in
-      {loading ? (
-        <div className="h-screen flex items-center justify-center text-white text-xl">Loading...</div>
-      ) : !user ? (
-        <AuthComponent />
-      ) : null} */}
     </main>
+  ) : (
+    <AuthComponent />
   );
-}
+} 
