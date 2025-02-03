@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { HoveredLink, Menu, MenuItem, ProductItem } from "../ui/navbar-menu";
+import { HoveredLink, Menu, MenuItem } from "../ui/navbar-menu";
 import { navbarItems } from "../data/navBarData"; 
 
 export function NavBarView() {
@@ -36,16 +36,12 @@ function Navbar() {
     <Menu setActive={setActive}>
       {navbarItems.map((menu, index) => (
         <MenuItem key={index} setActive={setActive} active={active} item={menu.title}>
-          {menu.title === "Products" ? (
+          {menu.title === "Destinations" || menu.title === "Travel Services" ? (
             <div className="text-sm grid grid-cols-2 gap-10 p-4">
-              {menu.links.map((product, productIndex) => (
-                <ProductItem
-                  key={productIndex}
-                  title={product.title}
-                  href={product.href}
-                  src={product.src}
-                  description={product.description}
-                />
+              {menu.links.map((link, linkIndex) => (
+                <div key={linkIndex} className="flex flex-col space-y-4 text-sm">
+                  <HoveredLink href={link.href}>{link.text}</HoveredLink>
+                </div>
               ))}
             </div>
           ) : (

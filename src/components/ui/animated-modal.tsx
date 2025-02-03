@@ -77,9 +77,9 @@ export const ModalBody = ({
     }
   }, [open]);
 
-  const modalRef = useRef<HTMLDivElement | null>(null); // Fixed type here
+  const modalRef = useRef<HTMLDivElement>(null); // Explicitly set type to HTMLDivElement
   const { setOpen } = useModal();
-  useOutsideClick(modalRef, () => setOpen(false));
+  useOutsideClick(modalRef, () => setOpen(false)); // Now the ref is properly typed
 
   return (
     <AnimatePresence>
@@ -219,7 +219,7 @@ const CloseIcon = () => {
 
 // Hook to detect clicks outside of a component
 export const useOutsideClick = (
-  ref: React.RefObject<HTMLDivElement>,
+  ref: React.RefObject<HTMLDivElement | null>, // Allow null in the type
   callback: () => void // explicitly typed callback function
 ) => {
   useEffect(() => {
@@ -237,5 +237,6 @@ export const useOutsideClick = (
       document.removeEventListener("mousedown", listener);
       document.removeEventListener("touchstart", listener);
     };
+    
   }, [ref, callback]);
 };

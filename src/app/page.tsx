@@ -8,7 +8,6 @@ import { NavBarView } from "@/components/view/navBarView";
 import { MottoView } from "@/components/view/mottoView";
 import { FooterView } from "@/components/view/footerView";
 import { TestimonialView } from "@/components/view/testimonialView";
-import { PlaceholdersAndVanishInputView } from "@/components/view/PlaceholdersAndVanishInputView";
 import { User } from "@supabase/supabase-js"; 
 
 export default function Page() {
@@ -50,14 +49,7 @@ export default function Page() {
       </div>
 
       <div className="w-full mt-16 px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 justify-items-center items-center">
-          <div className="w-full md:w-[50%]">
             <ReviewCardView />
-          </div>
-          <div className="w-full md:w-[50%]">
-            <PlaceholdersAndVanishInputView />
-          </div>
-        </div>
       </div>
 
       <div className="w-full mt-16 pt-8 pb-4 flex-shrink-0">

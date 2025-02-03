@@ -8,7 +8,6 @@ export function MottoView() {
   return (
     <div className="flex items-center justify-center w-full">
       <TextRevealCard text={mottoData.text} revealText={mottoData.revealText}>
-        {/* Only use TextRevealCard */}
       </TextRevealCard>
     </div>
   );
