@@ -24,20 +24,21 @@ export function PlaceholdersAndVanishInput({
   const [isClient, setIsClient] = useState(false); // Client-side check
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const startAnimation = () => {
+
+  const startAnimation = useCallback(() => {
     intervalRef.current = setInterval(() => {
       setCurrentPlaceholder((prev) => (prev + 1) % placeholders.length);
     }, 3000);
-  };
+  }, [placeholders]);
 
-  const handleVisibilityChange = () => {
+  const handleVisibilityChange = useCallback(() => {
     if (document.visibilityState !== "visible" && intervalRef.current) {
       clearInterval(intervalRef.current); // Clear the interval when the tab is not visible
       intervalRef.current = null;
     } else if (document.visibilityState === "visible") {
       startAnimation(); // Restart the interval when the tab becomes visible
     }
-  };
+  }, [startAnimation]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -52,7 +53,7 @@ export function PlaceholdersAndVanishInput({
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [placeholders]);
+  }, [startAnimation, handleVisibilityChange]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const newDataRef = useRef<PixelData[]>([]); // Type safety for newDataRef
@@ -82,9 +83,9 @@ export function PlaceholdersAndVanishInput({
     const newData: PixelData[] = [];
 
     for (let t = 0; t < 800; t++) {
-      let i = 4 * t * 800;
+      const i = 4 * t * 800;
       for (let n = 0; n < 800; n++) {
-        let e = i + 4 * n;
+        const e = i + 4 * n;
         if (
           pixelData[e] !== 0 &&
           pixelData[e + 1] !== 0 &&
@@ -109,7 +110,7 @@ export function PlaceholdersAndVanishInput({
     }
   }, [value, draw, isClient]);
 
-  const animate = (start: number) => {
+  const animate = useCallback((start: number) => {
     const animateFrame = (pos: number = 0) => {
       requestAnimationFrame(() => {
         const newArr: PixelData[] = [];
@@ -151,7 +152,7 @@ export function PlaceholdersAndVanishInput({
       });
     };
     animateFrame(start);
-  };
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !animating) {
