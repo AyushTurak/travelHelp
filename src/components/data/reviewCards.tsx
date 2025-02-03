@@ -5,7 +5,7 @@ export const REVIEW_CARDS = [
     designation: "Adventure Enthusiast",
     content: (
       <p>
-        My trip to the <span className="font-bold text-emerald-700 bg-emerald-100 px-1 py-0.5">Swiss Alps 🏔️</span> was beyond amazing! The views were breathtaking, and the hiking trails were so peaceful. I felt like I was walking through a postcard 🌄. Can't wait to plan my next adventure here! 🚶‍♀️
+        My trip to the <span className="font-bold text-emerald-700 bg-emerald-100 px-1 py-0.5">Swiss Alps 🏔️</span> was beyond amazing! The views were breathtaking, and the hiking trails were so peaceful. I felt like I was walking through a postcard 🌄. Can&apos;t wait to plan my next adventure here! 🚶‍♀️
       </p>
     ),
   },
@@ -45,7 +45,7 @@ export const REVIEW_CARDS = [
     designation: "Family Vacationer",
     content: (
       <p>
-        Took my family to Disneyland and had the time of our lives! 🎢✨ The kids loved the rides 🎠, and I loved the relaxing walks through the parks 🌺. The magic was real! We laughed, we played, and we made memories we'll cherish forever 🌟. Highly recommend it for family trips! 👨‍👩‍👧‍👦
+        Took my family to Disneyland and had the time of our lives! 🎢✨ The kids loved the rides 🎠, and I loved the relaxing walks through the parks 🌺. The magic was real! We laughed, we played, and we made memories we&apos;ll cherish forever 🌟. Highly recommend it for family trips! 👨‍👩‍👧‍👦
       </p>
     ),
   },

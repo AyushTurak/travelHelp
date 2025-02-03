@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-let interval: any;
+// Type for the interval
+let interval: ReturnType<typeof setInterval>;
 
 type Card = {
   id: number;
@@ -27,8 +28,9 @@ export const CardStack = ({
   useEffect(() => {
     startFlipping();
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Clear interval on cleanup
   }, []);
+
   const startFlipping = () => {
     interval = setInterval(() => {
       setCards((prevCards: Card[]) => {
@@ -52,7 +54,7 @@ export const CardStack = ({
             animate={{
               top: index * -CARD_OFFSET,
               scale: 1 - index * SCALE_FACTOR, // decrease scale for cards that are behind
-              zIndex: cards.length - index, //  decrease z-index for the cards that are behind
+              zIndex: cards.length - index, // decrease z-index for the cards that are behind
             }}
           >
             <div className="font-normal text-neutral-700 dark:text-neutral-200">

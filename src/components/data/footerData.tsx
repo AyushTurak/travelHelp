@@ -1,7 +1,4 @@
-// File: footerData.tsx
-
 import { IconHome, IconMapPin, IconPhone, IconBrandFacebook, IconBrandTwitter, IconBrandInstagram } from "@tabler/icons-react";
-import Image from "next/image";
 
 export const footerData = [
   {
@@ -34,17 +31,4 @@ export const footerData = [
     icon: <IconBrandInstagram className="h-full w-full text-neutral-500 dark:text-neutral-300" />,
     href: "#",
   },
-
-  // {
-  //   title: "About Us",
-  //   icon: (
-  //     <Image
-  //       src="https://www.example.com/logo.png" 
-  //       width={20}
-  //       height={20}
-  //       alt="Company Logo"
-  //     />
-  //   ),
-  //   href: "#",
-  // },
 ];

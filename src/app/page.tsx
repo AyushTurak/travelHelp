@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useSupabase } from "@/providers/SupabaseProvider";
 import AuthComponent from "@/components/AuthComponent";
@@ -64,7 +63,6 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Footer */}
       <div className="w-full mt-16 pt-8 pb-4 flex-shrink-0">
         <FooterView />
       </div>
