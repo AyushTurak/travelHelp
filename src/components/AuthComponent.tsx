@@ -37,7 +37,7 @@ export default function AuthComponent() {
       if (error) {
         setMessage(`Error: ${error.message}`);
       } else {
-        setMessage("Logged in successfully!");
+        setMessage("Logged in successfully! , Refresh the Page");
         router.push("/");
       }
     }
