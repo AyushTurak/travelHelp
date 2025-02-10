@@ -6,14 +6,11 @@ import { footerData } from "../data/footerData";
 
 export function FooterView() {
   return (
-    <div className="flex flex-col justify-between min-h-[4rem] w-full">
-      <div className="flex-grow flex items-center justify-center">
-        <FloatingDock
-          mobileClassName="translate-y-20"
-          items={footerData}
-        />
-      </div>
-
+    <div className="w-full flex justify-center items-center mb-2">
+      <FloatingDock 
+        mobileClassName="flex flex-row flex-nowrap justify-center items-center gap-4 px-4 py-2" 
+        items={footerData} 
+      />
     </div>
   );
 }

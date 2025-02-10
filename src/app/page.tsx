@@ -8,6 +8,8 @@ import { NavBarView } from "@/components/view/navBarView";
 import { MottoView } from "@/components/view/mottoView";
 import { FooterView } from "@/components/view/footerView";
 import { TestimonialView } from "@/components/view/testimonialView";
+import TravelPage from "@/components/view/carouselView";
+import { AvatarCirclesDemo } from "../components/view/avatarView";
 import type { User } from "@supabase/supabase-js";
 
 export default function Page() {
@@ -34,25 +36,34 @@ export default function Page() {
   }
 
   return user ? (
-    <main className="relative flex min-h-screen flex-col items-center justify-start bg-gradient-to-br from-blue-500 to-purple-600 text-white overflow-hidden">
+    <main className="relative flex flex-col min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 text-white overflow-hidden">
+      {/* Navbar */}
       <div className="w-full">
         <NavBarView />
       </div>
 
-      <div className="w-full mt-8">
-        <ImageSlider />
-      </div>
+      {/* Content Wrapper (Ensures Footer is Visible) */}
+      <div className="flex-grow flex flex-col items-center justify-start w-full">
+        <div className="w-full mt-8">
+          <ImageSlider />
+        </div>
 
-      <div className="w-full mt-16 px-4">
-        <MottoView />
-      </div>
+        <div className="w-full mt-16 px-4">
+          <MottoView />
+        </div>
 
-      <div className="w-full mt-16 px-4">
-        <TestimonialView />
-      </div>
+        <div className="w-full mt-16 px-4">
+          <TestimonialView />
+        </div>
 
-      <div className="w-full mt-16 px-4">
-        <ReviewCardView />
+        <div className="w-full mt-16 px-4">
+          <TravelPage />
+        </div>
+
+        <div className="w-full mt-16 px-4 flex flex-col items-center gap-8 lg:grid lg:grid-cols-2">
+          <ReviewCardView />
+          <AvatarCirclesDemo />
+        </div>
       </div>
 
       <div className="w-full mt-16 pt-8 pb-4 flex-shrink-0">
