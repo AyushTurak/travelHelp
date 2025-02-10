@@ -60,10 +60,11 @@ export default function Page() {
           <TravelPage />
         </div>
 
-        <div className="w-full mt-16 px-4 flex flex-col items-center gap-8 lg:grid lg:grid-cols-2">
-          <ReviewCardView />
-          <AvatarCirclesDemo />
-        </div>
+        <div className="w-full mt-16 px-4 flex flex-col items-center gap-8 lg:grid lg:grid-cols-[60%_40%]">
+  <ReviewCardView />
+  <AvatarCirclesDemo />
+</div>
+
       </div>
 
       <div className="w-full mt-16 pt-8 pb-4 flex-shrink-0">
